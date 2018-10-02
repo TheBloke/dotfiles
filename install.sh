@@ -5,7 +5,7 @@ if [ ! -d "$HOME/.yadr" ]; then
     git clone --depth=1 https://github.com/TheBloke/dotfiles.git "$HOME/.yadr"
     cd "$HOME/.yadr"
     export ASK="true"
-    rake install ask
+    rake install
 else
     echo "YADR is already installed"
 fi
