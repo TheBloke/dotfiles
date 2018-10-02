@@ -11,7 +11,7 @@ task :install => [:submodule_init, :submodules] do
   puts
 
   install_homebrew if RUBY_PLATFORM.downcase.include?("darwin")
-  install_rvm_binstubs
+  install_rvm_binstubs unless RUBY_PLATFORM.downcase.include?("solaris")
 
   # this has all the runcoms from this directory.
   install_files(Dir.glob('git/*')) if want_to_install?('git configs (color, aliases)')
@@ -27,7 +27,7 @@ task :install => [:submodule_init, :submodules] do
 
   Rake::Task["install_prezto"].execute
 
-  install_fonts
+  install_fonts unless RUBY_PLATFORM.downcase.include?("solaris")
 
   install_term_theme if RUBY_PLATFORM.downcase.include?("darwin")
 
@@ -123,6 +123,8 @@ end
 def number_of_cores
   if RUBY_PLATFORM.downcase.include?("darwin")
     cores = run %{ sysctl -n hw.ncpu }
+  elsif RUBY_PLATFORM.downcase.include?("solaris")
+    cores = run %{ psrinfo | wc -l}
   else
     cores = run %{ nproc }
   end
