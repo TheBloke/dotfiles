@@ -260,15 +260,15 @@ end
 def install_prezto
   puts
   puts "Installing Prezto (ZSH Enhancements)..."
-
-  run %{ ln -nfs "$HOME/.yadr/zsh/prezto" "${ZDOTDIR:-$HOME}/.zprezto" }
+  run %{ cd "$HOME" }
+  run %{ ln -nfs ".yadr/zsh/prezto" "${ZDOTDIR:-$HOME}/.zprezto" }
 
   # The prezto runcoms are only going to be installed if zprezto has never been installed
   install_files(Dir.glob('zsh/prezto/runcoms/z*'), :symlink)
 
   puts
   puts "Overriding prezto ~/.zpreztorc with YADR's zpreztorc to enable additional modules..."
-  run %{ ln -nfs "$HOME/.yadr/zsh/prezto-override/zpreztorc" "${ZDOTDIR:-$HOME}/.zpreztorc" }
+  run %{ ln -nfs ".yadr/zsh/prezto-override/zpreztorc" "${ZDOTDIR:-$HOME}/.zpreztorc" }
 
   puts
   puts "Creating directories for your customizations"
@@ -307,7 +307,7 @@ def install_files(files, method = :symlink)
   files.each do |f|
     file = f.split('/').last
     source = "#{ENV["PWD"]}/#{f}"
-    target = "#{ENV["HOME"]}/.#{file}"
+    target = ".#{file}"
 
     puts "======================#{file}=============================="
     puts "Source: #{source}"
@@ -319,6 +319,7 @@ def install_files(files, method = :symlink)
     end
 
     if method == :symlink
+      run %{ cd "$HOME" }
       run %{ ln -nfs "#{source}" "#{target}" }
     else
       run %{ cp -f "#{source}" "#{target}" }
