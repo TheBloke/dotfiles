@@ -306,8 +306,8 @@ end
 def install_files(files, method = :symlink)
   files.each do |f|
     file = f.split('/').last
-    source = "#{ENV["PWD"]}/#{f}"
-    target = ".#{file}"
+    source = "#{f}"
+    target = "#{ENV["HOME"]}/.#{file}"
 
     puts "======================#{file}=============================="
     puts "Source: #{source}"
